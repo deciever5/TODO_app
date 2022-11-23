@@ -2,9 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Login Form With Flask WTF</title>
 </head>
 <body>
+
+{% if error %}
+<div> {{ error }}</div>
+{% endif %}
+<form method="POST" action="/login/">
+    <input id="csrf_token" name="csrf_token" type="hidden" value="IjEyZTk2M2I3MzJiMmMxYWM5OWM5NWYzZDhiYjkyZjRmY2M4YzQyOTki.XpTKTw.W6OiNHjBH1SWR1S2ML7De01ol_o">
+    <label for="email">Email</label>
+    <input id="email" name="email" required type="text" value="">
+    <label for="password">Password</label>
+    <input id="password" name="password" required type="password" value="">
+    <input type="submit" value="Go">
+</form>
 
 </body>
 </html>
