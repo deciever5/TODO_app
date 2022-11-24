@@ -6,7 +6,7 @@
 </head>
 <body>
     <h2> Zmień: </h2>
-    <form method="POST" action="/todos/{{ todo_id }}/">
+    <form method="POST" action="/todos/{{ todo_id }}">
         {{ form.hidden_tag() }}
         <table>
             {% for field in form if field.widget.input_type != 'hidden' %}

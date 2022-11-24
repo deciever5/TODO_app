@@ -23,11 +23,11 @@ def todos_list():
 def todo_details(todo_id):
     todo = todos.get(todo_id - 1)
     form = TodoForm(data=todo)
-
     if request.method == "POST":
         if form.validate_on_submit():
             todos.update(todo_id - 1, form.data)
-        return redirect(url_for("todos_list"))
+            return redirect(url_for("todos_list"))
+
     return render_template("todo.html", form=form, todo_id=todo_id)
 
 
