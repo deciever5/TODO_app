@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Szczegóły todo</title>
+    <title>Szczegóły filmu</title>
 </head>
 <body>
     <h2> Zmień: </h2>
-    <form method="POST" action="/todos/{{ todo_id }}">
+    <form method="PUT" action="/api/v1/movies/{{ movie_id }}">
         {{ form.hidden_tag() }}
         <table>
             {% for field in form if field.widget.input_type != 'hidden' %}

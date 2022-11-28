@@ -1,8 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField
+from wtforms import StringField, BooleanField, IntegerField, DateField, FileField
 
 
-class TodoForm(FlaskForm):
+class MovieForm(FlaskForm):
     title = StringField('Tytuł')
-    description = StringField('Opis')
-    done = BooleanField('Zrobione?')
+    year = DateField('Rok produkcji')
+    plot = StringField('Opis')
+    score = IntegerField('Ocena IMDB')
+    my_score = IntegerField('Moja ocena')
+    watched = BooleanField('Oglądnięty?')
+    poster = FileField('Plakat')

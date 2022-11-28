@@ -1,44 +1,44 @@
 import json
 
 
-class Todos:
+class Movies:
     def __init__(self):
         try:
-            with open("todos.json", "r") as f:
-                self.todos = json.load(f)
+            with open("movie_library.json", "r",encoding="utf-8") as f:
+                self.movies = json.load(f)
         except FileNotFoundError:
-            self.todos = []
+            self.movies = []
 
     def all(self):
-        return self.todos
+        return self.movies
 
     def get(self, id):
-        return self.todos[id]
+        return self.movies[id]
 
     def create(self, data):
-        self.todos.append(data)
+        self.movies.append(data)
         self.save_all()
 
     def save_all(self):
-        with open("todos.json", "w") as f:
-            json.dump(self.todos, f)
+        with open("movie_library.json", "w") as f:
+            json.dump(self.movies, f)
 
     def update(self, id, data):
-        todo = self.get(id)
-        if todo:
-            index = self.todos.index(todo)
-            self.todos[index] = data
+        movie = self.get(id)
+        if movie:
+            index = self.movies.index(movie)
+            self.movies[index] = data
             self.save_all()
             return True
         return False
 
     def delete(self, id):
-        todo = self.get(id)
-        if todo:
-            self.todos.remove(todo)
+        movie = self.get(id)
+        if movie:
+            self.movies.remove(movie)
             self.save_all()
             return True
         return False
 
 
-todos = Todos()
+movies = Movies()
