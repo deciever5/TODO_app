@@ -26,8 +26,8 @@
     </thead>
     {% for movie in movies %}
     <tr>
-        <td><a href="/api/v1/movies/{{loop.index}}">{{movie.title }}</a></td>
-        <td> {{ movie.year}}</td>
+        <td><a href="/movies/{{loop.index}}">{{movie.title }}</a></td>
+        <td> {{movie.year}}</td>
         <td> {{movie.plot }}</td>
         <td> {{movie.score }}</td>
         <td> {{movie.my_score }}</td>
@@ -38,7 +38,7 @@
 </table>
 <div>
     <h2> Dodaj nowy film: </h2>
-    <form method="post" action="/api/v1/movies/">
+    <form method="POST" action="/api/v1/movies/">
         {{ form.hidden_tag() }}
         <table>
             {% for field in form if field.widget.input_type != 'hidden' %}

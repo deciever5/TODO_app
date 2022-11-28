@@ -1,5 +1,6 @@
-from flask import Flask, request, render_template, redirect, url_for, jsonify, make_response
+from flask import Flask, request, render_template, jsonify, make_response, url_for
 from werkzeug.exceptions import abort
+from werkzeug.utils import redirect
 
 from forms import MovieForm
 from models import movies
@@ -7,21 +8,26 @@ from models import movies
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "nunununnu"
 
+
 @app.route("/movies/", methods=["GET"])
 def movie_details2():
     form = MovieForm()
-    return render_template("movies.html", form=form,movies=movies.all())
+    return render_template("movies.html", form=form, movies=movies.all())
 
-@app.route("/movies/<int:movie_id>", methods=["GET", "POST"])
+
+@app.route("/movies/<int:movie_id>", methods=["GET"])
 def movie_details(movie_id):
     movie = movies.get(movie_id - 1)
     form = MovieForm(data=movie)
-    if request.method == "POST":
-        if form.validate_on_submit():
-            movies.update(movie_id - 1, form.data)
-            return redirect(url_for("movies_list_api_v1"))
-
     return render_template("movie.html", form=form, movie_id=movie_id)
+
+
+
+@app.route('/post_form/<int:movie_id>', methods=['POST'])
+def process_form(movie_id):
+    data = request.form
+
+    return redirect(url_for("update_movie",data=data, movie_id=movie_id))
 
 
 @app.route("/api/v1/movies/", methods=["GET"])
@@ -54,7 +60,6 @@ def create_movie():
     return jsonify({'movie': movie}), 201
 
 
-
 @app.route("/api/v1/movies/<int:movie_id>", methods=['DELETE'])
 def delete_movie(movie_id):
     result = movies.delete(movie_id)
@@ -74,7 +79,8 @@ def update_movie(movie_id):
     if any([
         'title' in data and not isinstance(data.get('title'), str),
         'plot' in data and not isinstance(data.get('plot'), str),
-        'done' in data and not isinstance(data.get('done'), bool)
+        'watched' in data and not isinstance(data.get('watched'), bool)
+        # TODO: add other validators here
     ]):
         abort(400)
     movie = {
@@ -92,6 +98,7 @@ def update_movie(movie_id):
 @app.errorhandler(400)
 def bad_request():
     return make_response(jsonify({'error': 'Bad request', 'status_code': 400}), 400)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
