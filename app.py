@@ -1,3 +1,4 @@
+import requests
 from flask import Flask, request, render_template, jsonify, make_response, url_for
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect
@@ -10,7 +11,7 @@ app.config["SECRET_KEY"] = "nunununnu"
 
 
 @app.route("/movies/", methods=["GET"])
-def movie_details2():
+def all_movie_details():
     form = MovieForm()
     return render_template("movies.html", form=form, movies=movies.all())
 
@@ -22,12 +23,13 @@ def movie_details(movie_id):
     return render_template("movie.html", form=form, movie_id=movie_id)
 
 
-
 @app.route('/post_form/<int:movie_id>', methods=['POST'])
 def process_form(movie_id):
-    data = request.form
-
-    return redirect(url_for("update_movie",data=data, movie_id=movie_id))
+    print(f"jestem tu id = {movie_id}")
+    headers = {"Content-Type": "application/json; charset=utf-8"}
+    requests.put('http://127.0.0.1:5000' + url_for("update_movie", data=request.form.to_dict(),
+                                                   headers=headers,movie_id=movie_id, ))
+    return redirect(url_for('all_movie_details'))
 
 
 @app.route("/api/v1/movies/", methods=["GET"])
@@ -37,7 +39,8 @@ def movies_list_api_v1():
 
 @app.route("/api/v1/movies/<int:movie_id>", methods=["GET"])
 def get_movie(movie_id):
-    movie = movies.get(movie_id)
+    print("jestem tu GET")
+    movie = movies.get(movie_id - 1)
     if not movie:
         abort(404)
     return jsonify({"movie": movie})
@@ -70,12 +73,16 @@ def delete_movie(movie_id):
 
 @app.route("/api/v1/movies/<int:movie_id>", methods=["PUT"])
 def update_movie(movie_id):
+    print("jestem tu PUT")
     movie = movies.get(movie_id)
-    if not movie:
+    """if not movie:
         abort(404)
-    if not request.json:
-        abort(400)
-    data = request.json
+    if not request.form:
+        abort(400)"""
+    print("jestem tu PUT2")
+
+    data = request.get_json()
+    print(data)
     if any([
         'title' in data and not isinstance(data.get('title'), str),
         'plot' in data and not isinstance(data.get('plot'), str),

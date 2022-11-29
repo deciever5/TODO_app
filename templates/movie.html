@@ -7,6 +7,7 @@
 <body>
     <h2> Zmień: </h2>
     <form method="POST" action="/post_form/{{movie_id}}">
+        <input type="hidden" name="_method" value="PUT">
         {{ form.hidden_tag() }}
         <table>
             {% for field in form if field.widget.input_type != 'hidden' %}
@@ -16,7 +17,7 @@
                 </tr>
             {% endfor %}
         </table>
-        <input type="submit" value="Dodaj">
+        <input type="submit" value="Zmień">
     </form>
 </body>
 </html>

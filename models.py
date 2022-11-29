@@ -4,7 +4,7 @@ import json
 class Movies:
     def __init__(self):
         try:
-            with open("movie_library.json", "r",encoding="utf-8") as f:
+            with open("movie_library.json", "r", encoding="utf-8") as f:
                 self.movies = json.load(f)
         except FileNotFoundError:
             self.movies = []
@@ -24,6 +24,7 @@ class Movies:
             json.dump(self.movies, f)
 
     def update(self, id, data):
+        print("jestem tu Uodate")
         movie = self.get(id)
         if movie:
             index = self.movies.index(movie)
