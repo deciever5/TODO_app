@@ -19,7 +19,7 @@ def all_movie_details():
 
 @app.route("/movies/<int:movie_id>", methods=["GET"])
 def movie_details(movie_id):
-    movie = movies.get(movie_id - 1)
+    movie = movies.get(movie_id )
     form = MovieForm(data=movie)
     return render_template("movie.html", form=form, movie_id=movie_id)
 
