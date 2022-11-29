@@ -13,7 +13,7 @@ class Movies:
         return self.movies
 
     def get(self, id):
-        return self.movies[id]
+        return self.movies[id-1]
 
     def create(self, data):
         self.movies.append(data)

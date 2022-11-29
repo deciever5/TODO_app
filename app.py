@@ -2,6 +2,7 @@ import requests
 from flask import Flask, request, render_template, jsonify, make_response, url_for
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect
+from werkzeug.wrappers import response
 
 from forms import MovieForm
 from models import movies
@@ -27,8 +28,10 @@ def movie_details(movie_id):
 def process_form(movie_id):
     print(f"jestem tu id = {movie_id}")
     headers = {"Content-Type": "application/json; charset=utf-8"}
-    requests.put('http://127.0.0.1:5000' + url_for("update_movie", data=request.form.to_dict(),
-                                                   headers=headers,movie_id=movie_id, ))
+    data = request.form.to_dict()
+    print(data)
+    requests.put('http://127.0.0.1:5000' + url_for("update_movie", movie_id=movie_id), json=data,
+                 headers=headers)
     return redirect(url_for('all_movie_details'))
 
 
@@ -83,20 +86,20 @@ def update_movie(movie_id):
 
     data = request.get_json()
     print(data)
-    if any([
+    """    if any([
         'title' in data and not isinstance(data.get('title'), str),
         'plot' in data and not isinstance(data.get('plot'), str),
         'watched' in data and not isinstance(data.get('watched'), bool)
         # TODO: add other validators here
     ]):
-        abort(400)
+        abort(400)"""
     movie = {
         'title': data.get('title', movie['title']),
         'plot': data.get('plot', movie['plot']),
         'score': data.get('score', movie['score']),
         'my_score': data.get('my_score', movie['my_score']),
-        'watched': data.json.get('watched', movie['watched']),
-        'poster': data.json.get('poster', movie["poster"]),
+        'watched': data.get('watched', movie['watched']),
+        'poster': data.get('poster', movie["poster"]),
     }
     movies.update(movie_id, movie)
     return jsonify({'movie': movie})
