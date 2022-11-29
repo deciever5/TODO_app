@@ -38,7 +38,7 @@
 </table>
 <div>
     <h2> Dodaj nowy film: </h2>
-    <form method="POST" action="/api/v1/movies/">
+    <form method="POST" action="/post_form/">
         {{ form.hidden_tag() }}
         <table>
             {% for field in form if field.widget.input_type != 'hidden' %}

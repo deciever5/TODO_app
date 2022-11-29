@@ -2,7 +2,6 @@ import requests
 from flask import Flask, request, render_template, jsonify, make_response, url_for
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect
-from werkzeug.wrappers import response
 
 from forms import MovieForm
 from models import movies
@@ -19,21 +18,26 @@ def all_movie_details():
 
 @app.route("/movies/<int:movie_id>", methods=["GET"])
 def movie_details(movie_id):
-    movie = movies.get(movie_id )
+    movie = movies.get(movie_id)
     form = MovieForm(data=movie)
     return render_template("movie.html", form=form, movie_id=movie_id)
 
 
 @app.route('/post_form/<int:movie_id>', methods=['POST'])
-def process_form(movie_id):
-    print(f"jestem tu id = {movie_id}")
+def update_movie_from_form(movie_id):
     headers = {"Content-Type": "application/json; charset=utf-8"}
     data = request.form.to_dict()
-    print(data)
-    requests.put('http://127.0.0.1:5000' + url_for("update_movie", movie_id=movie_id), json=data,
+    requests.put(request.url_root + url_for("update_movie", movie_id=movie_id), json=data,
                  headers=headers)
     return redirect(url_for('all_movie_details'))
 
+@app.route('/post_form/', methods=['POST'])
+def create_movie_from_form():
+    headers = {"Content-Type": "application/json; charset=utf-8"}
+    data = request.form.to_dict()
+    requests.post(request.url_root + url_for("create_movie"), json=data,
+                 headers=headers)
+    return redirect(url_for('all_movie_details'))
 
 @app.route("/api/v1/movies/", methods=["GET"])
 def movies_list_api_v1():
@@ -51,11 +55,12 @@ def get_movie(movie_id):
 
 @app.route("/api/v1/movies/", methods=["POST"])
 def create_movie():
+    print(request.json())
     if not request.json or 'title' not in request.json:
         abort(400)
     movie = {
         'id': movies.all()[-1]['id'] + 1,
-        'title': request.json['title'],
+        'title': request.json.get['title'],
         'plot': request.json.get('plot', ""),
         'score': request.json.get('score', ""),
         'my_score': request.json.get('my_score', ""),
