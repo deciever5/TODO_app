@@ -31,13 +31,15 @@ def update_movie_from_form(movie_id):
                  headers=headers)
     return redirect(url_for('all_movie_details'))
 
+
 @app.route('/post_form/', methods=['POST'])
 def create_movie_from_form():
     headers = {"Content-Type": "application/json; charset=utf-8"}
     data = request.form.to_dict()
     requests.post(request.url_root + url_for("create_movie"), json=data,
-                 headers=headers)
+                  headers=headers)
     return redirect(url_for('all_movie_details'))
+
 
 @app.route("/api/v1/movies/", methods=["GET"])
 def movies_list_api_v1():
@@ -46,7 +48,6 @@ def movies_list_api_v1():
 
 @app.route("/api/v1/movies/<int:movie_id>", methods=["GET"])
 def get_movie(movie_id):
-    print("jestem tu GET")
     movie = movies.get(movie_id - 1)
     if not movie:
         abort(404)
@@ -55,12 +56,11 @@ def get_movie(movie_id):
 
 @app.route("/api/v1/movies/", methods=["POST"])
 def create_movie():
-    print(request.json())
     if not request.json or 'title' not in request.json:
         abort(400)
     movie = {
-        'id': movies.all()[-1]['id'] + 1,
-        'title': request.json.get['title'],
+        'id': int(movies.all()[-1]['id']) + 1,
+        'title': request.json.get('title'),
         'plot': request.json.get('plot', ""),
         'score': request.json.get('score', ""),
         'my_score': request.json.get('my_score', ""),
@@ -81,16 +81,12 @@ def delete_movie(movie_id):
 
 @app.route("/api/v1/movies/<int:movie_id>", methods=["PUT"])
 def update_movie(movie_id):
-    print("jestem tu PUT")
     movie = movies.get(movie_id)
     """if not movie:
         abort(404)
     if not request.form:
         abort(400)"""
-    print("jestem tu PUT2")
-
     data = request.get_json()
-    print(data)
     """    if any([
         'title' in data and not isinstance(data.get('title'), str),
         'plot' in data and not isinstance(data.get('plot'), str),

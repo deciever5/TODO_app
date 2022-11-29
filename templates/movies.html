@@ -2,17 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>My movie library</title>
     <style>
         table, th, tr, td {border: 1px solid black;}
-
     </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" type = "text/css" href= "{{ url_for('static',filename='/styles/styles.css') }}">
 </head>
-<body>
+<body class = "body">
 
+
+
+<br>
 <h2>Lista Filmów</h2>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
-<table>
+<table class="table table-striped">
     <thead>
     <tr>
     <th>Title</th>
@@ -35,21 +41,28 @@
         <td> {{movie.poster }}</td>
     </tr>
     {% endfor %}
-</table>
-<div>
+</table >
+<div >
+    <br>
     <h2> Dodaj nowy film: </h2>
     <form method="POST" action="/post_form/">
         {{ form.hidden_tag() }}
-        <table>
+        <table class="table table-striped" style = "width:100%">
             {% for field in form if field.widget.input_type != 'hidden' %}
             <tr>
                 <th> {{field.label }} {% if field.flags.required %}* {% endif %}</th>
-                <td> {{field}}</td>
+                <td style="width: 60%">
+                    <div style="width: 100%">
+                        {{field(size=32)}}
+                    </div>
+                </td>
             </tr>
             {% endfor %}
         </table>
+        <br>
         <input type="submit" value="Dodaj">
     </form>
 </div>
+    </div>
 </body>
 </html>

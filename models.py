@@ -24,7 +24,6 @@ class Movies:
             json.dump(self.movies, f)
 
     def update(self, id, data):
-        print("jestem tu Uodate")
         movie = self.get(id)
         if movie:
             index = self.movies.index(movie)
