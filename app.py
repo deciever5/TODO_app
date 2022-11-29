@@ -58,6 +58,7 @@ def get_movie(movie_id):
 def create_movie():
     if not request.json or 'title' not in request.json:
         abort(400)
+    print(movies.all()[-1] )
     movie = {
         'id': int(movies.all()[-1]['id']) + 1,
         'title': request.json.get('title'),
@@ -82,10 +83,10 @@ def delete_movie(movie_id):
 @app.route("/api/v1/movies/<int:movie_id>", methods=["PUT"])
 def update_movie(movie_id):
     movie = movies.get(movie_id)
-    """if not movie:
+    if not movie:
         abort(404)
     if not request.form:
-        abort(400)"""
+        abort(400)
     data = request.get_json()
     """    if any([
         'title' in data and not isinstance(data.get('title'), str),
@@ -95,6 +96,7 @@ def update_movie(movie_id):
     ]):
         abort(400)"""
     movie = {
+        'id': movie['id'],
         'title': data.get('title', movie['title']),
         'plot': data.get('plot', movie['plot']),
         'score': data.get('score', movie['score']),
